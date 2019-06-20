@@ -6,7 +6,7 @@
 #########################
 # Data for the newsletter
 #########################
-
+#this is a comment
 CAMPUS = {
   "name": "Springfield",
   "address": "171 Maple St, Springfield, MA 01105",
