@@ -23,7 +23,7 @@ ARTICLES = [
   {"author": "Dr. Crystle Kovacek Denesik", "title": "Legal", "text": "Most programs are not write-once. They are reworked and rewritten again and again in their lived. Bugs must be debugged. Changing requirements and the need for increased functionality mean the program itself may be modified on an ongoing basis. During this process, human beings must be able to read and understand the original code. It is therefore more important by far for humans to be able to understand the program than it is for the computer."},
   {"author": "Alfred Jast Hermann", "title": "Real-Estate", "text": "I didn't work hard to make Ruby perfect for everyone, because you feel differently from me. No language can be perfect for everyone. I tried to make Ruby perfect for me, but maybe it's not perfect for you. The perfect language for Guido van Rossum is probably Python."},
   {"author": "Michale Bruen Boehm", "title": "Consulting", "text": "Everyone has an individual background. Someone may come from Python, someone else may come from Perl, and they may be surprised by different aspects of the language. Then they come up to me and say, 'I was surprised by this feature of the language, so therefore Ruby violates the principle of least surprise.' Wait. Wait. The principle of least surprise is not for you only."},
-  {"author: "Tony Keeling Cartwright", "title": "Design", "text": "Often people, especially computer engineers, focus on the machines. But in fact we need to focus on humans, on how humans care about doing programming or operating the application of the machines."},
+  {"author": "Tony Keeling Cartwright", "title": "Design", "text": "Often people, especially computer engineers, focus on the machines. But in fact we need to focus on humans, on how humans care about doing programming or operating the application of the machines."},
 ]
 
 #########################
@@ -31,7 +31,7 @@ ARTICLES = [
 #########################
 
 def calculate_recipients
-  SUBSCRIBERS.each do |email|
+  SUBSCRIBERS.reject do |email|
     UNSUBSCRIBED.include?(email)
   end
 end
@@ -53,15 +53,19 @@ def print_subject
 end
 
 def print_article(article)
-  # TODO - format article with title, byline, and text
-  puts "TITLE"
-  puts "by: AUTHOR"
-  puts "TEXT"
-  puts ""
-end
+  article.each_cons(3) do |title, author, text|
+    puts "#{author}","#{title}","#{text}"
+    #Not sure how this got the title first then author but it worked. I could not figure out how to get the actual words :author, :title, :text to not show up though.
+  end
+end 
+
+ 
+
 
 def print_articles(articles)
-  print_article(articles.first)
+  articles.each do |articles|
+  print_article(articles)
+  end 
 end
 
 def print_newsletter(number)
@@ -73,18 +77,20 @@ def print_newsletter(number)
   print_recipients
   puts "Body:"
   puts "#{format_campus_location(CAMPUS)} Newsletter - #{format_week}"
+  number_of_articles = ARTICLES.count
   articles = first_n_articles(number_of_articles)
   print_articles(articles)
   puts format_footer(CAMPUS)
-  end
-end
+ end
+
+
 
 #########################
 # formatting helper methods for printing the newsletter
 #########################
 
 def format_campus_location(campus)
-  "Flatiron #{campus["name"]}"
+  "Flatiron Springfield #{campus["name"]}"
 end
 
 def format_week
@@ -103,11 +109,16 @@ def generate_newsletter(input)
   if input.nil?
     # if there's no input number specified, print just the first 3 articles
     print_newsletter(3)
-  else
+  elsif input.to_i <= 0
+    puts "Input should be a number more than 0."
+  else 
+    input = input.to_i
     # if a number of articles is specified, print that many articles
     number_of_articles = input
     print_newsletter(number_of_articles)
+    
   end
+  #I struggled a lot with this method. 
 end
 
 def run
@@ -117,6 +128,7 @@ def run
   else
     puts "Newsletter maker. \nUsage: ruby newsletter.rb [number]\nOptionally, pass in a number of articles to include in the newsletter"
   end
+  
 end
 
 # When we run the file with
